@@ -13,3 +13,11 @@
 # Проверка, есть ли файлы с указанным расширением в исходной директории
 
 # Копирование файлов с указанным расширением в целевую директорию
+
+information=`ls $source_directory/*.$file_extension`
+	for i in $information 
+	do
+	newName=`echo $i | sed 's/\.${file_extension}/.${new_file_extension}/'`
+	cp $source_directory/$i $target_directory/$newName
+	done
+
