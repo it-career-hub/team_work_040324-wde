@@ -11,5 +11,13 @@
 # Проверка существования целевой директории
 
 # Проверка, есть ли файлы с указанным расширением в исходной директории
+if ( find $source_directory -type f -name "*.$file_extension" );
+then
+    echo "File $file_extension found!"
+else 
+    echo "File $file_extension not found!"
+    exit 1
+fi
+  
 
 # Копирование файлов с указанным расширением в целевую директорию
