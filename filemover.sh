@@ -10,7 +10,18 @@ read -p "Введите целевую директорию: " target_directory
 
 # Проверка существования исходной директории
 
+if [ ! -d "$source_directory" ]; then
+   echo “Directory doesn’t exist”
+   exit 1
+fi
+
 # Проверка существования целевой директории
+
+if [ ! -d "$target_directory" ]; then
+   echo “Directory doesn’t exist”
+   exit 1
+fi
+
 
 # Проверка, есть ли файлы с указанным расширением в исходной директории
 
