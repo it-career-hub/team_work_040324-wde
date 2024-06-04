@@ -5,40 +5,33 @@ read -p "Введите исходную директорию: " source_director
 read -p "Введите целевую директорию: " target_directory
 
 # Запрос расширения файлов, которые нужно скопировать
-read -p "Введите исходное расширение: " file_extension
+read -p "Введите расширение файлов для копирования (без точки): " file_extension
 # Запросить новое расширение для файлов.
-read -p "Введите новое расширение: " new_file_extension
+read -p "Введите новое расширение файлов (без точки): " new_file_extension
 # Проверка существования исходной директории
-
 if [ ! -d "$source_directory" ]; then
-   echo “Directory doesn’t exist”
-   exit 1
-fi
-
-# Проверка существования целевой директории
-
-if [ ! -d "$target_directory" ]; then
-   echo “Directory doesn’t exist”
-   exit 1
-fi
-
-
-# Проверка, есть ли файлы с указанным расширением в исходной директории
-if ( find $source_directory -type f -name "*.$file_extension" );
-then
-    echo "File $file_extension found!"
-else 
-    echo "File $file_extension not found!"
+    echo "Директория '$source_directory' не существует или недоступна."
     exit 1
 fi
-  
+# Проверка существования целевой директории
+if [ ! -d "$target_directory" ]; then
+    echo "Директория '$target_directory' не существует или недоступна."
+    exit 1
+fi
+# Проверка, есть ли файлы с указанным расширением в исходной директории
+matching_files=$(find "$source_directory" -maxdepth 1 -type f -name "*.$file_extension")
+
+if [ -z "$matching_files" ]; then
+    echo "В директории '$source_directory' нет файлов с расширением '.$file_extension'."
+    exit 1
+fi
 
 # Копирование файлов с указанным расширением в целевую директорию
-
-information=`ls $source_directory/*.$file_extension`
-	for i in $information 
-	do
-	newName=`echo $i | sed 's/\.${file_extension}/.${new_file_extension}/'`
-	cp $source_directory/$i $target_directory/$newName
-	done
+for new in $matching_files
+do
+file=`basename $new`
+new_name=`echo $file | sed "s/\.${file_extension}/.${new_file_extension}/"`
+echo "$target_directory/$new_name"
+cp $new  $target_directory/$new_name
+done
 
